@@ -8,24 +8,6 @@ using System.Windows.Interop;
 
 namespace RoundedScreen
 {
-    public static class PreventTouchToMousePromotion
-    {
-        public static void Register(FrameworkElement root)
-        {
-            root.PreviewMouseDown += Evaluate;
-            root.PreviewMouseMove += Evaluate;
-            root.PreviewMouseUp += Evaluate;
-        }
-
-        private static void Evaluate(object sender, MouseEventArgs e)
-        {
-            if (e.StylusDevice != null)
-            {
-                e.Handled = true;
-            }
-        }
-    }
-
     public partial class MainWindow : Window
     {
         public const int WS_EX_TRANSPARENT = 0x00000020;
@@ -40,7 +22,7 @@ namespace RoundedScreen
         public MainWindow()
         {
             InitializeComponent();
-            SetStartup();
+            this.SetStartup();
         }
 
         private void SetStartup()
@@ -59,5 +41,22 @@ namespace RoundedScreen
         }
 
         private void WndRoundedScreen_Closing(object sender, System.ComponentModel.CancelEventArgs e) { e.Cancel = true; }
+
+        private void WndRoundedScreen_LostFocus(object sender, RoutedEventArgs e)
+        {
+            this.Activate();
+            this.Topmost = true; 
+            this.Topmost = false; 
+            this.Focus();      
+        }
+
+        private void WndRoundedScreen_Loaded(object sender, RoutedEventArgs e)
+        {
+            Point location = this.PointToScreen(new Point(0, 0));
+            this.WindowStartupLocation = WindowStartupLocation.Manual;
+
+            this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
+            this.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
+        }
     }
 }

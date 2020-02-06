@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RoundedScreen"
         mc:Ignorable="d"
-        Title="RoundedScreen" Height="450" Width="800" Topmost="True" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowState="Maximized" ShowInTaskbar="False" Focusable="False" IsTabStop="False" Closing="WndRoundedScreen_Closing" WindowStyle="None" AllowsTransparency="True">
+        Title="RoundedScreen" Loaded="WndRoundedScreen_Loaded" Height="{DynamicResource {x:Static SystemParameters.MaximizedPrimaryScreenHeightKey}}" Width="{DynamicResource {x:Static SystemParameters.MaximizedPrimaryScreenWidthKey}}" Topmost="True" ResizeMode="NoResize" WindowStartupLocation="Manual" ShowInTaskbar="False" Focusable="False" IsTabStop="False" Closing="WndRoundedScreen_Closing" WindowStyle="None" AllowsTransparency="True" LostFocus="WndRoundedScreen_LostFocus" Left="0" Top="0">
     <Window.Resources>
         <Storyboard x:Key="Opening">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
@@ -24,8 +24,8 @@
                          Opacity="0.0" />
     </Window.Background>
     <Grid x:Name="grid">
-        <Image x:Name="imgCornerTL" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="12" Source="pack://siteoforigin:,,,/Resources/Corner.png"/>
-        <Image x:Name="imgCornerTR" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="12" Source="pack://siteoforigin:,,,/Resources/Corner.png" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="imgCornerTL" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="16" Source="Resources/Corner.png"/>
+        <Image x:Name="imgCornerTR" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="16" Source="Resources/Corner.png" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -35,7 +35,7 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <Image x:Name="imgCornerBR" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Bottom" Width="12" Source="pack://siteoforigin:,,,/Resources/Corner.png" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="imgCornerBR" HorizontalAlignment="Right" Margin="0" VerticalAlignment="Bottom" Width="16" Source="Resources/Corner.png" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -45,7 +45,7 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
-        <Image x:Name="imgCornerBL" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" Width="12" Source="pack://siteoforigin:,,,/Resources/Corner.png" RenderTransformOrigin="0.5,0.5">
+        <Image x:Name="imgCornerBL" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" Width="16" Source="Resources/Corner.png" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
