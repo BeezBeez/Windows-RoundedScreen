@@ -1,5 +1,5 @@
 # Windows-RoundedScreen
-A simple workaround to get a rounded screen corners on Windows
+A simple workaround to get rounded screen corners on Windows
 
 changes from BeezBeez-orginal:
 - hidden from alt+tab list
