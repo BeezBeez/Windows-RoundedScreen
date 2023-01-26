@@ -1,10 +1,11 @@
 # Windows-RoundedScreen
-A simple workaround to get rounded screen corners on Windows
+A simple workaround to get rounded screen corners on Windows.
 
-changes from BeezBeez-orginal:
+LATEST CHANGES (26/01/2023) :
 - hidden from alt+tab list
 - made corners a bit smaller
-- added an appicon
+- added an AppIcon
 - upped the version number
+- added a command to quit the program
 
-In the release, I included a command to quit the program, as it has no UI.
+**THIS PROJECT IS NOT MAINTAINED BUT I FREQUENTLY CHECK THE PULL REQUESTS**
