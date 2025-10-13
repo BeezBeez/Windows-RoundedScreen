@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -13,6 +13,10 @@ namespace RoundedScreen
         public const int WS_EX_TRANSPARENT = 0x00000020;
         public const int GWL_EXSTYLE = (-20);
         public const int WS_EX_TOOLWINDOW = 0x00000080;
+        private const string RegistryKeyPath = "SOFTWARE\\RoundedScreen";
+        private const string CornerSizeValueName = "CornerSize";
+        private const int DefaultCornerSize = 16;
+        private bool _allowClose = false;
 
         [DllImport("user32.dll")]
         public static extern int GetWindowLong(IntPtr hwnd, int index);
@@ -41,7 +45,13 @@ namespace RoundedScreen
             SetWindowLong(hwnd, GWL_EXSTYLE, extendedStyle | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW);
         }
 
-        private void WndRoundedScreen_Closing(object sender, System.ComponentModel.CancelEventArgs e) { e.Cancel = true; }
+        private void WndRoundedScreen_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!_allowClose)
+            {
+                e.Cancel = true;
+            }
+        }
 
         private void WndRoundedScreen_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -58,6 +68,53 @@ namespace RoundedScreen
 
             this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
             this.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
+
+            int size = ReadCornerSize();
+            ApplyCornerSize(size);
+        }
+
+        public void ApplyCornerSize(int size)
+        {
+            if (size < 4) size = 4;
+            if (size > 64) size = 64;
+
+            imgCornerTL.Width = size;
+            imgCornerTL.Height = size;
+            imgCornerTR.Width = size;
+            imgCornerTR.Height = size;
+            imgCornerBL.Width = size;
+            imgCornerBL.Height = size;
+            imgCornerBR.Width = size;
+            imgCornerBR.Height = size;
+        }
+
+        public void SaveCornerSize(int size)
+        {
+            using (var key = Registry.CurrentUser.CreateSubKey(RegistryKeyPath))
+            {
+                key.SetValue(CornerSizeValueName, size, RegistryValueKind.DWord);
+            }
+        }
+
+        public int ReadCornerSize()
+        {
+            using (var key = Registry.CurrentUser.CreateSubKey(RegistryKeyPath))
+            {
+                object value = key.GetValue(CornerSizeValueName, DefaultCornerSize);
+                try
+                {
+                    return Convert.ToInt32(value);
+                }
+                catch
+                {
+                    return DefaultCornerSize;
+                }
+            }
+        }
+
+        public void AllowClose()
+        {
+            _allowClose = true;
         }
     }
 }
