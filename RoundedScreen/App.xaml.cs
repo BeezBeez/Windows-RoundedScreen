@@ -43,6 +43,45 @@ namespace RoundedScreen
             }
             menu.Items.Add(new ToolStripSeparator());
 
+            // Rounding mode section
+            menu.Items.Add(new ToolStripLabel("Rounding mode"));
+            var simpleItem = new ToolStripMenuItem("Simple (Circle)") { CheckOnClick = true };
+            var smoothItem = new ToolStripMenuItem("Smooth (Squircle)") { CheckOnClick = true };
+
+            // Initialize checked state from registry
+            var wndInit = Current.Windows.OfType<MainWindow>().FirstOrDefault();
+            var currentMode = wndInit?.ReadRoundingMode() ?? RoundedScreen.MainWindow.RoundingMode.Smooth;
+            simpleItem.Checked = currentMode == RoundedScreen.MainWindow.RoundingMode.Simple;
+            smoothItem.Checked = currentMode == RoundedScreen.MainWindow.RoundingMode.Smooth;
+
+            void ApplyMode(RoundedScreen.MainWindow.RoundingMode mode)
+            {
+                var wnd = Current.Windows.OfType<MainWindow>().FirstOrDefault();
+                if (wnd != null)
+                {
+                    wnd.SaveRoundingMode(mode);
+                    int size = wnd.ReadCornerSize();
+                    wnd.ApplyCornerSize(size);
+                }
+            }
+
+            simpleItem.Click += (s, a) =>
+            {
+                simpleItem.Checked = true;
+                smoothItem.Checked = false;
+                ApplyMode(RoundedScreen.MainWindow.RoundingMode.Simple);
+            };
+            smoothItem.Click += (s, a) =>
+            {
+                simpleItem.Checked = false;
+                smoothItem.Checked = true;
+                ApplyMode(RoundedScreen.MainWindow.RoundingMode.Smooth);
+            };
+
+            menu.Items.Add(simpleItem);
+            menu.Items.Add(smoothItem);
+            menu.Items.Add(new ToolStripSeparator());
+
             var exitItem = new ToolStripMenuItem("Exit");
             exitItem.Click += (s, a) => ExitApplication();
             menu.Items.Add(exitItem);
