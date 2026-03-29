@@ -1,7 +1,3 @@
-**this is a fork for development purposes, please use the [main project](https://github.com/BeezBeez/Windows-RoundedScreen) instead**
-
-[BeezBeez/Windows-RoundedScreen](https://github.com/BeezBeez/Windows-RoundedScreen)
-
 # RoundedScreen
 A simple workaround to get rounded screen corners on Windows.
 
