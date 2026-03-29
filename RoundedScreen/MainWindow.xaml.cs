@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 
@@ -28,11 +27,19 @@ namespace RoundedScreen
             Smooth = 1,
         }
 
+        public const int HWND_TOPMOST = -1;
+        public const int SWP_NOSIZE = 0x0001;
+        public const int SWP_NOMOVE = 0x0002;
+        public const int SWP_NOACTIVATE = 0x0010;
+
         [DllImport("user32.dll")]
         public static extern int GetWindowLong(IntPtr hwnd, int index);
 
         [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
         public MainWindow()
         {
@@ -54,8 +61,11 @@ namespace RoundedScreen
         {
             base.OnSourceInitialized(e);
             IntPtr hwnd = new WindowInteropHelper(this).Handle;
+
             int extendedStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
             SetWindowLong(hwnd, GWL_EXSTYLE, extendedStyle | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW);
+
+            SetWindowPos(hwnd, new IntPtr(HWND_TOPMOST), 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -77,18 +87,22 @@ namespace RoundedScreen
         private void WndRoundedScreen_LostFocus(object sender, RoutedEventArgs e)
         {
             this.Activate();
-            this.Topmost = true; 
-            this.Topmost = false; 
-            this.Focus();      
+            this.Topmost = true;
+            this.Topmost = false;
+            this.Focus();
         }
 
         private void WndRoundedScreen_Loaded(object sender, RoutedEventArgs e)
         {
+            AdjustWindowSizeAndPosition();
+        }
+
+        private void AdjustWindowSizeAndPosition()
+        {
             Point location = this.PointToScreen(new Point(0, 0));
             this.WindowStartupLocation = WindowStartupLocation.Manual;
-
-            this.Width = System.Windows.SystemParameters.PrimaryScreenWidth;
-            this.Height = System.Windows.SystemParameters.PrimaryScreenHeight;
+            this.Width = SystemParameters.PrimaryScreenWidth;
+            this.Height = SystemParameters.PrimaryScreenHeight;
 
             int size = ReadCornerSize();
             ApplyCornerSize(size);
